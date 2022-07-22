@@ -18,5 +18,9 @@
         android:id="@+id/sucsessFragment"
         android:name="com.example.passhashgenerator.SucsessFragment"
         android:label="Success"
-        tools:layout="@layout/fragment_sucsess" />
+        tools:layout="@layout/fragment_sucsess" >
+        <action
+            android:id="@+id/action_sucsessFragment_to_welcomeFragment"
+            app:destination="@id/welcomeFragment" />
+    </fragment>
 </navigation>

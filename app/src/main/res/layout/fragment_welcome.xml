@@ -81,5 +81,28 @@
         app:layout_constraintEnd_toEndOf="@id/ed_text_input"
         app:layout_constraintStart_toStartOf="@id/ed_text_input" />
 
+    <View
+        android:id="@+id/success_backgrovnd"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:alpha="0"
+        android:background="@color/teal_200"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/img_done"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_baseline_done_outline_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:alpha="0"
+        app:tint="@color/white" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

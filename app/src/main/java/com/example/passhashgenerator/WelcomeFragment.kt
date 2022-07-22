@@ -4,7 +4,11 @@ import android.os.Bundle
 import android.view.*
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.passhashgenerator.databinding.FragmentWelcomeBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class WelcomeFragment : Fragment() {
 
@@ -25,11 +29,38 @@ class WelcomeFragment : Fragment() {
         ArrayAdapter(requireContext(), R.layout.drop_dovn_item, passvordAllLevelsDifficulty).also {
             binding.textAutoComplete.setAdapter(it)
         }
-
-
         setHasOptionsMenu(true)
+        binding.btnGenerate.setOnClickListener {
+            lifecycleScope.launch {
+                makeAnimation()
+            }
+        }
 
         return binding.root
+    }
+
+    private suspend fun makeAnimation() {
+        binding.apply {
+            tvTitle.animate().alpha(0f).duration = 500L
+            btnGenerate.animate().alpha(0f).duration = 500L
+            textInLayout.animate().alpha(0f).translationXBy(1200f).duration = 500L
+            edTextInput.animate().alpha(0f).translationXBy(-1200f).duration = 500L
+            delay(300)
+            successBackgrovnd.animate().apply {
+                alpha(1f).duration = 500L
+                rotationBy((360f * 4)).duration = 500L
+                scaleXBy(900f).duration = 700L
+                scaleYBy(900f).duration = 700L
+            }
+            delay(500)
+            imgDone.animate().alpha(1f).duration = 500L
+            delay(1000)
+            navigateToSuccessFragment()
+        }
+    }
+
+    private fun navigateToSuccessFragment() {
+        findNavController().navigate(R.id.action_welcomeFragment_to_sucsessFragment)
     }
 
     @Deprecated("Deprecated in Java")
