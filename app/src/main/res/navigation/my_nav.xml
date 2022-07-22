@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_welcome" >
         <action
             android:id="@+id/action_welcomeFragment_to_sucsessFragment"
-            app:destination="@id/sucsessFragment" />
+            app:destination="@id/sucsessFragment"
+            app:enterAnim="@anim/from_bottom"
+            app:exitAnim="@anim/to_top"
+            app:popEnterAnim="@anim/from_top"
+            app:popExitAnim="@anim/to_bottom"/>
     </fragment>
     <fragment
         android:id="@+id/sucsessFragment"

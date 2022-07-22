@@ -20,15 +20,19 @@ class WelcomeFragment : Fragment() {
         resources.getStringArray(R.array.pass_diff)
     }
 
+    override fun onResume() {
+        ArrayAdapter(requireContext(), R.layout.drop_dovn_item, passvordAllLevelsDifficulty).also {
+            binding.textAutoComplete.setAdapter(it)
+        }
+        super.onResume()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentWelcomeBinding.inflate(inflater, container, false)
 
-        ArrayAdapter(requireContext(), R.layout.drop_dovn_item, passvordAllLevelsDifficulty).also {
-            binding.textAutoComplete.setAdapter(it)
-        }
         setHasOptionsMenu(true)
         binding.btnGenerate.setOnClickListener {
             lifecycleScope.launch {
@@ -41,6 +45,7 @@ class WelcomeFragment : Fragment() {
 
     private suspend fun makeAnimation() {
         binding.apply {
+            btnGenerate.isEnabled = false
             tvTitle.animate().alpha(0f).duration = 500L
             btnGenerate.animate().alpha(0f).duration = 500L
             textInLayout.animate().alpha(0f).translationXBy(1200f).duration = 500L
@@ -54,7 +59,7 @@ class WelcomeFragment : Fragment() {
             }
             delay(500)
             imgDone.animate().alpha(1f).duration = 500L
-            delay(1000)
+            delay(400)
             navigateToSuccessFragment()
         }
     }
@@ -68,8 +73,8 @@ class WelcomeFragment : Fragment() {
         inflater.inflate(R.menu.top_menu, menu)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
         _binding = null
+        super.onDestroyView()
     }
 }
