@@ -1,4 +1,4 @@
-package com.example.passhashgenerator
+package com.example.passhashgenerator.utils
 
 open class EventVraper<out T>(private val content: T) {
 

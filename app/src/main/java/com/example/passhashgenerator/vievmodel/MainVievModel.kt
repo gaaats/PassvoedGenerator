@@ -1,14 +1,14 @@
-package com.example.passhashgenerator
+package com.example.passhashgenerator.vievmodel
 
 import android.app.Application
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.passhashgenerator.utils.EventVraper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,19 +39,17 @@ class MainVievModel @Inject constructor(private val application: Application) : 
         get() = _eventForSnackBar
 
 
-    fun getHash(text: String, algorithm: String): String {
-        val typeSHA = checkType(algorithm)
+    fun getHash(text: String, algorithm: String) {
+        val typeSHA = checkTypeAlgorithm(algorithm)
         val bytes = MessageDigest.getInstance(typeSHA).digest(text.toByteArray())
         _textResult.value = toHex(bytes)
-        return toHex(bytes)
-
     }
 
     private fun toHex(bytes: ByteArray): String {
         return bytes.joinToString("") { "%02x".format(it) }
     }
 
-    private fun checkType(algorithm: String): String {
+    private fun checkTypeAlgorithm(algorithm: String): String {
         return when (algorithm) {
             "SIMPLE" -> "MD5"
             "NORMAL" -> "SHA256"
@@ -68,4 +66,5 @@ class MainVievModel @Inject constructor(private val application: Application) : 
         }
         _eventForSnackBar.value = EventVraper("Copied")
     }
+
 }

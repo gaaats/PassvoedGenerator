@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/welcomeFragment"
-        android:name="com.example.passhashgenerator.WelcomeFragment"
+        android:name="com.example.passhashgenerator.ui.WelcomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_welcome" >
         <action
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/sucsessFragment"
-        android:name="com.example.passhashgenerator.SucsessFragment"
+        android:name="com.example.passhashgenerator.ui.SucsessFragment"
         android:label="Success"
         tools:layout="@layout/fragment_sucsess" >
         <action

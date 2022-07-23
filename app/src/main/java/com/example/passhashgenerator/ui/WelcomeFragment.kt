@@ -1,34 +1,30 @@
-package com.example.passhashgenerator
+package com.example.passhashgenerator.ui
 
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
-import androidx.lifecycle.SavedStateViewModelFactory
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
+import com.example.passhashgenerator.vievmodel.MainVievModel
+import com.example.passhashgenerator.R
 import com.example.passhashgenerator.databinding.FragmentWelcomeBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @AndroidEntryPoint
 @FragmentScoped
 class WelcomeFragment : Fragment() {
-
-    @Inject
-    @Singleton
-    lateinit var vievModelfactory: VievModelFactory
 
     private val mainVievModel by activityViewModels<MainVievModel>()
 
@@ -56,21 +52,17 @@ class WelcomeFragment : Fragment() {
         setHasOptionsMenu(true)
         binding.btnGenerate.setOnClickListener {
             generatePass()
-
         }
-        Log.d("MY_TAG", "onViewCreated:WelcomeFragment: ${mainVievModel} ")
-
         return binding.root
     }
 
     private fun generatePass() {
-        var textInput = ""
         val currentAlgorith = binding.textAutoComplete.text.toString()
-        if (binding.edTextInput.text.isNullOrEmpty()) {
+        val textInput = binding.edTextInput.text.toString()
+        if (textInput.isEmpty()){
             initSnackBar("Empty field")
             return
         }
-        textInput = binding.edTextInput.text.toString()
         lifecycleScope.launch {
             mainVievModel.getHash(textInput, currentAlgorith)
             makeAnimationToSuccessScreen()
@@ -127,5 +119,17 @@ class WelcomeFragment : Fragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+    }
+}
+
+
+fun <T> Fragment.collectFlovFragment(
+    flow: Flow<T>,
+    functionSuspend: suspend (T) -> Unit
+) {
+    viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            flow.collectLatest(functionSuspend)
+        }
     }
 }
