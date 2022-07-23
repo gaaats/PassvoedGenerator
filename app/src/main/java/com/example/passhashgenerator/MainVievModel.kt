@@ -1,5 +1,9 @@
 package com.example.passhashgenerator
 
+import android.app.Application
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,11 +13,15 @@ import java.security.MessageDigest
 import javax.inject.Inject
 
 @HiltViewModel
-class MainVievModel @Inject constructor() : ViewModel() {
+class MainVievModel @Inject constructor(private val application: Application) : ViewModel() {
 
     private var _textResult = MutableLiveData<String>()
     val textResult: LiveData<String>
         get() = _textResult
+
+    private var _eventForSnackBar = MutableLiveData<EventVraper<String>>()
+    val eventForSnackBar: LiveData<EventVraper<String>>
+        get() = _eventForSnackBar
 
 
     fun getHash(text: String, algorithm: String): String {
@@ -25,8 +33,7 @@ class MainVievModel @Inject constructor() : ViewModel() {
     }
 
     private fun toHex(bytes: ByteArray): String {
-        Log.d("MY_TAG", bytes.joinToString("") { "%02x".format(it) })
-        return bytes.joinToString { "%02x".format(it) }
+        return bytes.joinToString("") { "%02x".format(it) }
     }
 
     private fun checkType(algorithm: String): String {
@@ -36,5 +43,14 @@ class MainVievModel @Inject constructor() : ViewModel() {
             "HARD" -> "SHA512"
             else -> throw RuntimeException("MainVievModel--checkType--error, no such type")
         }
+    }
+
+    fun saveToClipBoard() {
+        val clipboardManager =
+            application.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        ClipData.newPlainText("Encrypted text", textResult.value).also {
+            clipboardManager.setPrimaryClip(it)
+        }
+        _eventForSnackBar.value = EventVraper("Copied")
     }
 }

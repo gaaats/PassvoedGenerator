@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.SavedStateViewModelFactory
@@ -15,22 +16,21 @@ import androidx.navigation.navGraphViewModels
 import com.example.passhashgenerator.databinding.FragmentWelcomeBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @AndroidEntryPoint
-@Singleton
+@FragmentScoped
 class WelcomeFragment : Fragment() {
 
     @Inject
     @Singleton
     lateinit var vievModelfactory: VievModelFactory
 
-    private val mainVievModel: MainVievModel by lazy {
-        ViewModelProvider(this, vievModelfactory)[MainVievModel::class.java]
-    }
+    private val mainVievModel by activityViewModels<MainVievModel>()
 
     private var _binding: FragmentWelcomeBinding? = null
     private val binding
@@ -58,7 +58,7 @@ class WelcomeFragment : Fragment() {
             generatePass()
 
         }
-        Log.d("MY_TAG", "onViewCreated:WelcomeFragment: ${mainVievModel} ")
+//        Log.d("MY_TAG", "onViewCreated:WelcomeFragment: ${mainVievModel} ")
 
         return binding.root
     }
