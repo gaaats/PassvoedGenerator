@@ -43,6 +43,7 @@ class SucsessFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.d("MY_TAG", "vievmodel is${mainVievModel}")
         initTextVievResultObserve()
         initSnackBarObserve()
 

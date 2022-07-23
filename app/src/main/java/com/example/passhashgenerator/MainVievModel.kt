@@ -8,12 +8,27 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.security.MessageDigest
 import javax.inject.Inject
 
 @HiltViewModel
 class MainVievModel @Inject constructor(private val application: Application) : ViewModel() {
+
+    private val _isSplashScreenActive = MutableStateFlow(true)
+    val isSplashScreenActive = _isSplashScreenActive.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            delay(600)
+            _isSplashScreenActive.value = false
+        }
+    }
 
     private var _textResult = MutableLiveData<String>()
     val textResult: LiveData<String>

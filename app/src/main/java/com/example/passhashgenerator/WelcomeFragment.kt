@@ -58,7 +58,7 @@ class WelcomeFragment : Fragment() {
             generatePass()
 
         }
-//        Log.d("MY_TAG", "onViewCreated:WelcomeFragment: ${mainVievModel} ")
+        Log.d("MY_TAG", "onViewCreated:WelcomeFragment: ${mainVievModel} ")
 
         return binding.root
     }

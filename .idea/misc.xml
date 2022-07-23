@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/PassHashGenerator/app/src/main/res/drawable/ic_baseline_lock_24.xml" value="0.2155" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/PassHashGenerator/app/src/main/res/layout/activity_main.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/PassHashGenerator/app/src/main/res/layout/drop_dovn_item.xml" value="0.2734375" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/PassHashGenerator/app/src/main/res/layout/fragment_sucsess.xml" value="0.27447916666666666" />
