@@ -6,7 +6,11 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Singleton
 
+@AndroidEntryPoint
+@Singleton
 class MainActivity : AppCompatActivity() {
 
     private val navController by lazy {

@@ -1,16 +1,36 @@
 package com.example.passhashgenerator
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.lifecycle.SavedStateViewModelFactory
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import com.example.passhashgenerator.databinding.FragmentWelcomeBinding
+import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import javax.inject.Singleton
 
+@AndroidEntryPoint
+@Singleton
 class WelcomeFragment : Fragment() {
+
+    @Inject
+    @Singleton
+    lateinit var vievModelfactory: VievModelFactory
+
+    private val mainVievModel: MainVievModel by lazy {
+        ViewModelProvider(this, vievModelfactory)[MainVievModel::class.java]
+    }
 
     private var _binding: FragmentWelcomeBinding? = null
     private val binding
@@ -35,15 +55,37 @@ class WelcomeFragment : Fragment() {
 
         setHasOptionsMenu(true)
         binding.btnGenerate.setOnClickListener {
-            lifecycleScope.launch {
-                makeAnimation()
-            }
+            generatePass()
+
         }
+        Log.d("MY_TAG", "onViewCreated:WelcomeFragment: ${mainVievModel} ")
 
         return binding.root
     }
 
-    private suspend fun makeAnimation() {
+    private fun generatePass() {
+        var textInput = ""
+        val currentAlgorith = binding.textAutoComplete.text.toString()
+        if (binding.edTextInput.text.isNullOrEmpty()) {
+            initSnackBar("Empty field")
+            return
+        }
+        textInput = binding.edTextInput.text.toString()
+        lifecycleScope.launch {
+            mainVievModel.getHash(textInput, currentAlgorith)
+            makeAnimationToSuccessScreen()
+        }
+    }
+
+    private fun initSnackBar(text: String) {
+        val snackBar = Snackbar.make(
+            binding.rootLayout, text, Snackbar.LENGTH_SHORT
+        )
+        snackBar.setAction("Okay") {}
+        snackBar.show()
+    }
+
+    private suspend fun makeAnimationToSuccessScreen() {
         binding.apply {
             btnGenerate.isEnabled = false
             tvTitle.animate().alpha(0f).duration = 500L
@@ -62,6 +104,15 @@ class WelcomeFragment : Fragment() {
             delay(400)
             navigateToSuccessFragment()
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.clear_menu) {
+            binding.edTextInput.text.clear()
+            initSnackBar("Cleared")
+            return true
+        }
+        return true
     }
 
     private fun navigateToSuccessFragment() {
